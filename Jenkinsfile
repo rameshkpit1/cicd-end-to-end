@@ -46,6 +46,28 @@ pipeline {
                 }
             }
         }
+
+        stage('Update Deployment File') {
+        environment {
+            GIT_REPO_NAME = "cicd-end-to-end"
+            GIT_USER_NAME = "rameshkpit1"
+        }
+        steps {
+            withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                sh '''
+                    git config user.email "ram.btp68@gmail.com"
+                    git config user.name "Ramesh Babu M"
+                    BUILD_NUMBER=${BUILD_NUMBER}
+                    #REPOSITORY_NAME="rameshm1/ultimate-cicd"
+                    sed -i "s|image: .*|image: rameshm1/django:${BUILD_NUMBER}|" deploy/deploy.yml
+                    #sed -i "s/image: ${REPOSITORY_NAME}:.*/image: ${REPOSITORY_NAME}:${BUILD_NUMBER}/g" deploy/deploy.yml
+                    git add deploy/deploy.yml
+                    git commit -m "Update deployment image to version ${BUILD_NUMBER}"
+                    git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                '''
+            }
+        }
+    }
+  }
         
     }
-}
