@@ -30,6 +30,7 @@ pipeline {
                 script{
                     sh '''
                     echo 'Push to Repo'
+                    echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --passwd-stdin docker.io
                     docker push rameshm1/cicd-e2e:${BUILD_NUMBER}
                     '''
                 }
