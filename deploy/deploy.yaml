@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: todo
-        image: rameshm1/django:10
+        image: rameshm1/django:11
         ports:
         - containerPort: 8000
