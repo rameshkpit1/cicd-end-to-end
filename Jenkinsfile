@@ -25,14 +25,17 @@ pipeline {
                 }
             }
         }
+
         stage('Login to Docker') {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: env.DOCKER_CREDENTIALS_ID, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
+                    }
+                }
             }
-          }
         }
+
         stage('Push the artifacts'){
            steps{
                 script{
