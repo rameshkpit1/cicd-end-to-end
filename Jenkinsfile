@@ -4,6 +4,7 @@ pipeline {
     
     environment {
         IMAGE_TAG = "${BUILD_NUMBER}"
+        DOCKER_CREDENTIALS_ID = 'docker-cred'
     }
     
     stages {
@@ -24,13 +25,19 @@ pipeline {
                 }
             }
         }
-
+        stage('Login to Docker') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: env.DOCKER_CREDENTIALS_ID, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
+                    }
+                }
+            }
         stage('Push the artifacts'){
            steps{
                 script{
                     sh '''
                     echo 'Push to Repo'
-                    echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --passwd-stdin docker.io
                     docker push rameshm1/cicd-e2e:${BUILD_NUMBER}
                     '''
                 }
