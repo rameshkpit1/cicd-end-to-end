@@ -60,7 +60,6 @@ pipeline {
                     BUILD_NUMBER=${BUILD_NUMBER}
                     #REPOSITORY_NAME="rameshm1/ultimate-cicd"
                     sed -i "s|image: .*|image: rameshm1/django:${BUILD_NUMBER}|" deploy/deploy.yaml
-                    #sed -i "s/image: ${REPOSITORY_NAME}:.*/image: ${REPOSITORY_NAME}:${BUILD_NUMBER}/g" deploy/deploy.yml
                     git add deploy/deploy.yaml
                     git commit -m "Update deployment image to version ${BUILD_NUMBER}"
                     git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
